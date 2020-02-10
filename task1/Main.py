@@ -31,10 +31,6 @@ def main():
         custom_tokenizer("soccer players have low stamina", True, True, is_debug=True)
 
         print()
-        nb_model.predict_for_string("you retard, go home and die")
-        nb_model.predict_for_string("trump is a great leader")
-        nb_model.predict_for_string("trump")
-        nb_model.predict_for_string("trump is an old baby")
         nb_model.predict_for_string("Obama is a terrible player")
         nb_model.predict_for_string("Emanuel is a terrible player")
 
