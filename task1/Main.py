@@ -3,8 +3,8 @@ from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-from ml_project.task1.Analyze import DataAnalyzer
-from ml_project.task1.NbModel import NbModel
+from task1.Analyze import DataAnalyzer
+from task1.NbModel import NbModel
 
 TRAIN_MODEL = False
 ANALYZE_DATA = True

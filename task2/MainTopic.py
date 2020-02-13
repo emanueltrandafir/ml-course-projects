@@ -8,8 +8,9 @@ class PostsAnalyzer:
     def __init__(self):
 
         self.STOP_WORDS = ["lt", "gt", "li", "ul", "ol", "div", "pre", "code", "td", "in"]  # to remove the html tags from the posts
-        self.TOPIC_THRESHOLD_PERCENT = 50
+        self.TOPIC_THRESHOLD_PERCENT = 0
         self.NGRAM_RANGE = (1, 3)
+        self.MIN_DIF = 60
 
         self.CSV_FILE_PATH = "../data/stackoverflow_big.csv"
         self.TITLE_COL = "title"
@@ -31,7 +32,7 @@ class PostsAnalyzer:
             doc = str(title) + "\n" + str(post) + "\n" + str(tags)
             docs.append(doc)
 
-        tfidf_vectorizer = TfidfVectorizer(lowercase=True, stop_words=self.STOP_WORDS, ngram_range=self.NGRAM_RANGE)
+        tfidf_vectorizer = TfidfVectorizer(lowercase=True, stop_words=self.STOP_WORDS, ngram_range=self.NGRAM_RANGE, min_df=self.MIN_DIF)
         tfidf_vectorizer.fit(docs)
 
         self.tfidf_matrix = tfidf_vectorizer.transform(docs).toarray()
@@ -41,9 +42,7 @@ class PostsAnalyzer:
     def get_topic_for_post_by_index(self, post_index):
 
         post_scores = self.tfidf_matrix[post_index]
-
         topic_score = np.amax(post_scores)
-
 
         if topic_score*100 > self.TOPIC_THRESHOLD_PERCENT:
             topic_index = (np.where(post_scores == topic_score))[0][0]
@@ -57,6 +56,7 @@ class PostsAnalyzer:
         else:
             # print("index: %s; \nno topic above thershold \n\n * * * * * * * * * * * \n" % post_index)
             pass
+
     def readData(self):
         data_frame = pd.read_csv(self.CSV_FILE_PATH, ",")
         self.title_arr = data_frame[self.TITLE_COL].values
@@ -68,5 +68,5 @@ if __name__ == "__main__":
     model = PostsAnalyzer()
     model.startJob()
 
-    for i in range(1, 4000):
+    for i in range(22, 40):
         model.get_topic_for_post_by_index(i)
